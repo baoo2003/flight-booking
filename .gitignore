@@ -1,0 +1,4 @@
+build/*.jar
+build/*.war
+flight-booking-ejb/dist/*.jar
+flight-booking-war/dist/*.war
