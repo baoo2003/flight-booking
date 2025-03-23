@@ -2,3 +2,7 @@ build/*.jar
 build/*.war
 flight-booking-ejb/dist/*.jar
 flight-booking-war/dist/*.war
+flight-booking-ejb/nbproject/private/private.properties
+flight-booking-war/nbproject/private/private.properties
+nbproject/project.properties
+nbproject/private/private.properties
