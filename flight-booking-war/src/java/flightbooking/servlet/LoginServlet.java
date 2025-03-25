@@ -88,11 +88,13 @@ public class LoginServlet extends HttpServlet {
             // Đăng nhập thành công → Lưu user vào session & chuyển hướng
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            response.sendRedirect(request.getContextPath() + "/home");
+            response.sendRedirect("home.jsp");
         } else {
             // Đăng nhập thất bại → Trả về `index.jsp` với thông báo lỗi
-            request.setAttribute("errorMessage", "Sai tài khoản hoặc mật khẩu!");
-            request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);            
+            HttpSession session = request.getSession();
+            session.setAttribute("errorMessage", "Sai tài khoản hoặc mật khẩu!");
+            response.sendRedirect("login.jsp");
+//            request.getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);            
         }
     }
 

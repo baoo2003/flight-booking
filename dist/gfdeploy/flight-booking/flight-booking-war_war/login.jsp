@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false" %>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,9 +39,13 @@
         <button type="submit">Đăng nhập</button>
     </form>
     <%-- Hiển thị thông báo lỗi nếu có --%>
-    <c:if test="${not empty errorMessage}">
-        <p style="color: red;">${errorMessage}</p>
-    </c:if>
+    <%
+        String errorMessage = (String) session.getAttribute("errorMessage");
+        if (errorMessage != null) {
+            out.println("<p style='color:red;'>" + errorMessage + "</p>");
+            session.removeAttribute("errorMessage"); // Xóa sau khi hiển thị để tránh hiển thị lại sau refresh
+        }
+    %>
 </div>
 
 </body>
