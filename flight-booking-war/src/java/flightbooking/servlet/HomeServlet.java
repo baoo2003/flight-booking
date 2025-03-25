@@ -4,8 +4,12 @@
  */
 package flightbooking.servlet;
 
+import flightbooking.ejb.AirportsFacadeLocal;
+import flightbooking.entity.Airports;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,6 +32,10 @@ public class HomeServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    @EJB
+    private AirportsFacadeLocal airportsFacade;
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -57,7 +65,11 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        List<Airports> airports = airportsFacade.findAll();
+        request.setAttribute("airports", airports);
+
+        // Chuyển hướng đến home.jsp
+        request.getRequestDispatcher("home.jsp").forward(request, response);
     }
 
     /**

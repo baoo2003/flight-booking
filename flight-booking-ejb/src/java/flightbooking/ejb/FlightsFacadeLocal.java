@@ -5,6 +5,7 @@
 package flightbooking.ejb;
 
 import flightbooking.entity.Flights;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -29,4 +30,5 @@ public interface FlightsFacadeLocal {
 
     int count();
     
+    List<Flights> searchFlights(String departure, String arrival, Date date);
 }

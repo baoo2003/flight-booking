@@ -4,24 +4,27 @@
  */
 package flightbooking.servlet;
 
-import flightbooking.ejb.UsersFacadeLocal;
-import flightbooking.entity.Users;
+import flightbooking.ejb.FlightsFacadeLocal;
+import flightbooking.entity.Flights;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author vuquo
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "SearchFlightServlet", urlPatterns = {"/search-flights"})
+public class SearchFlightServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,7 +37,7 @@ public class LoginServlet extends HttpServlet {
      */
     
     @EJB
-    private UsersFacadeLocal usersFacade;
+    private FlightsFacadeLocal flightsFacade;
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -44,10 +47,10 @@ public class LoginServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");            
+            out.println("<title>Servlet SearchFlightServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet SearchFlightServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -79,22 +82,36 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        // Lấy tham số từ form
+        String departure = request.getParameter("departure");
+        String arrival = request.getParameter("arrival");
+        String dateString = request.getParameter("flightDate");
 
-        Users user = usersFacade.findByUsername(username); // Tìm user theo username
-        
-        if (user != null && user.getPassword().equals(password)) {
-            // Đăng nhập thành công → Lưu user vào session & chuyển hướng
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-            response.sendRedirect("home");
-        } else {
-            // Đăng nhập thất bại → Trả về `index.jsp` với thông báo lỗi
-            HttpSession session = request.getSession();
-            session.setAttribute("errorMessage", "Sai tài khoản hoặc mật khẩu!");
-            response.sendRedirect("login.jsp");            
+        // Kiểm tra input hợp lệ
+        if (departure == null || arrival == null || dateString == null ||
+            departure.trim().isEmpty() || arrival.trim().isEmpty() || dateString.trim().isEmpty()) {
+            request.setAttribute("error", "Vui lòng nhập đầy đủ thông tin tìm kiếm.");
+            request.getRequestDispatcher("home.jsp").forward(request, response);
+            return;
         }
+
+        // Chuyển đổi ngày bay từ chuỗi sang Date
+        Date date = null;
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            date = dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            request.setAttribute("error", "Định dạng ngày không hợp lệ.");
+            request.getRequestDispatcher("home.jsp").forward(request, response);
+            return;
+        }
+
+        // Gọi EJB để tìm kiếm chuyến bay
+        List<Flights> flights = flightsFacade.searchFlights(departure, arrival, date);
+
+        // Gửi danh sách chuyến bay đến flight.jsp
+        request.setAttribute("flights", flights);
+        request.getRequestDispatcher("flight.jsp").forward(request, response);
     }
 
     /**
