@@ -96,19 +96,22 @@ public class SearchFlightServlet extends HttpServlet {
         }
 
         // Chuyển đổi ngày bay từ chuỗi sang Date
-        Date date = null;
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            date = dateFormat.parse(dateString);
-        } catch (ParseException e) {
-            request.setAttribute("error", "Định dạng ngày không hợp lệ.");
-            request.getRequestDispatcher("home.jsp").forward(request, response);
-            return;
-        }
+//        Date date = null;
+//        try {
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//            date = dateFormat.parse(dateString);
+//        } catch (ParseException e) {
+//            request.setAttribute("error", "Định dạng ngày không hợp lệ.");
+//            request.getRequestDispatcher("home.jsp").forward(request, response);
+//            return;
+//        }
 
+        System.out.println(departure);
+        System.out.println(arrival);
+        System.out.println(dateString);
         // Gọi EJB để tìm kiếm chuyến bay
-        List<Flights> flights = flightsFacade.searchFlights(departure, arrival, date);
-
+        List<Flights> flights = flightsFacade.searchFlights(departure, arrival, dateString);
+        
         // Gửi danh sách chuyến bay đến flight.jsp
         request.setAttribute("flights", flights);
         request.getRequestDispatcher("flight.jsp").forward(request, response);

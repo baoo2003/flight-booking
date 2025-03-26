@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -68,12 +69,12 @@ public class Passengers implements Serializable {
     @Column(name = "passport_number")
     private String passportNumber;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 2147483647)
+    @NotNull    
+    @Size(min = 1, max = 50)    
     @Column(name = "type")
     private String type;
-    @Column(name = "id_card_number")
-    private Serializable idCardNumber;
+    @Column(name = "id_card_number")    
+    private String idCardNumber;
     @JoinColumn(name = "booking_id", referencedColumnName = "booking_id")
     @ManyToOne(optional = false)
     private Bookings bookingId;
@@ -148,11 +149,11 @@ public class Passengers implements Serializable {
         this.type = type;
     }
 
-    public Serializable getIdCardNumber() {
+    public String getIdCardNumber() {
         return idCardNumber;
     }
 
-    public void setIdCardNumber(Serializable idCardNumber) {
+    public void setIdCardNumber(String idCardNumber) {
         this.idCardNumber = idCardNumber;
     }
 

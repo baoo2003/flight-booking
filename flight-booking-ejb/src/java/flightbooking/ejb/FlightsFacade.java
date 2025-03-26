@@ -7,6 +7,7 @@ package flightbooking.ejb;
 import flightbooking.entity.Flights;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -34,40 +35,38 @@ public class FlightsFacade extends AbstractFacade<Flights> implements FlightsFac
     public FlightsFacade() {
         super(Flights.class);
     }
-    
+
     @Override
-    public List<Flights> searchFlights(String departure, String arrival, Date date) {
-        System.out.println("departure:");
-        System.out.println(departure);
-        System.out.println("arrival:");
-        System.out.println(arrival);
-        System.out.println("date:");
-        System.out.println(date);
+    public List<Flights> searchFlights(String departure, String arrival, String date) {
+        System.out.println("departure: " + departure);
+        System.out.println("arrival: " + arrival);
+        System.out.println("date: " + date);
+
+        // Convert String to java.sql.Date
+        java.sql.Date sqlDate = null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date utilDate = sdf.parse(date);
+            sqlDate = new java.sql.Date(utilDate.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new ArrayList<>();  // Return empty list if date parsing fails
+        }
+
         TypedQuery<Flights> query = em.createQuery(
-            "SELECT f FROM Flights f WHERE f.departureAirportId.name = :departure " +
-            "AND f.arrivalAirportId.name = :arrival ", Flights.class); 
-//        +
-//            "AND CAST(f.departureTime AS DATE) = :date"
+            "SELECT f FROM Flights f WHERE f.departureAirportId.code = :departure " +
+            "AND f.arrivalAirportId.code = :arrival " +
+            "AND CAST(f.departureTime AS DATE) = :date", Flights.class
+        );
 
         query.setParameter("departure", departure);
         query.setParameter("arrival", arrival);
+        query.setParameter("date", sqlDate);  // Set parameter as java.sql.Date
 
-//        // Chỉ lấy phần ngày của tham số date để so sánh chính xác
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//        Date formattedDate = null;
-//        try {
-//            formattedDate = sdf.parse(sdf.format(date));
-//        } catch (ParseException ex) {
-//            Logger.getLogger(FlightsFacade.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        query.setParameter("date", formattedDate);
-
-        // Lấy danh sách kết quả
+        // Fetch results
         List<Flights> flightsList = query.getResultList();
-        
+
         System.out.println("Số lượng chuyến bay tìm thấy: " + flightsList.size());
-        // In ra console GlassFish Server
-        System.out.println("=== Search Results ===");
         for (Flights flight : flightsList) {
             System.out.println("Flight ID: " + flight.getFlightId() +
                                ", Number: " + flight.getFlightNumber() +
@@ -81,6 +80,5 @@ public class FlightsFacade extends AbstractFacade<Flights> implements FlightsFac
 
         return flightsList;
     }
-
     
 }

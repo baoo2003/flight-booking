@@ -8,6 +8,7 @@ import flightbooking.entity.Passengers;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 
 /**
  *
@@ -27,5 +28,5 @@ public class PassengersFacade extends AbstractFacade<Passengers> implements Pass
     public PassengersFacade() {
         super(Passengers.class);
     }
-    
+
 }

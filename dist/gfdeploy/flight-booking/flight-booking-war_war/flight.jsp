@@ -10,7 +10,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Kết quả tìm kiếm chuyến bay</title>
+    <title>Chuyến bay</title>
 </head>
 <body>
 
@@ -32,6 +32,7 @@
             <th>Thời gian đến</th>
             <th>Giá vé</th>
             <th>Số ghế còn trống</th>
+            <th>Đặt chỗ</th>
         </tr>
         <%
             for (Flights flight : flights) {
@@ -44,6 +45,7 @@
             <td><%= flight.getArrivalTime() %></td>
             <td><%= flight.getPrice() %> VNĐ</td>
             <td><%= flight.getAvailableSeats() %></td>
+            <td><a href="booking?flightId=<%= flight.getFlightId() %>">Đặt</a></td>
         </tr>
         <%
             }

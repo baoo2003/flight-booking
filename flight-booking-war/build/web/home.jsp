@@ -39,7 +39,7 @@
 
 <p>Đây là trang Home sau khi đăng nhập.</p>
 
-<form action="search-flights" method="post">
+<form action="./search-flights" method="post">
     <label for="departure">Sân bay khởi hành:</label>
     <select name="departure" id="departure" required>
         <option value="">-- Chọn sân bay --</option>

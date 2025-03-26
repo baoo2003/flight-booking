@@ -27,6 +27,5 @@ public interface PassengersFacadeLocal {
 
     List<Passengers> findRange(int[] range);
 
-    int count();
-    
+    int count();    
 }

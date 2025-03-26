@@ -30,5 +30,5 @@ public interface FlightsFacadeLocal {
 
     int count();
     
-    List<Flights> searchFlights(String departure, String arrival, Date date);
+    List<Flights> searchFlights(String departure, String arrival, String date);
 }
