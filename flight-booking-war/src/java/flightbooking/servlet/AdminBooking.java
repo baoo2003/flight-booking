@@ -4,25 +4,30 @@
  */
 package flightbooking.servlet;
 
-import flightbooking.ejb.UsersFacadeLocal;
-import flightbooking.entity.Users;
+import flightbooking.ejb.AirportsFacadeLocal;
+import flightbooking.ejb.BookingsFacadeLocal;
+import flightbooking.entity.Airports;
+import flightbooking.entity.Bookings;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author vuquo
+ * @author Quang Trung
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "AdminBooking", urlPatterns = {"/admin/booking"})
+public class AdminBooking extends HttpServlet {
 
+    @EJB
+    private BookingsFacadeLocal bookingsFacade;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,10 +37,6 @@ public class LoginServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
-    @EJB
-    private UsersFacadeLocal usersFacade;
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -44,10 +45,10 @@ public class LoginServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");            
+            out.println("<title>Servlet AdminBooking</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AdminBooking at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -65,7 +66,11 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        List<Bookings> bookings = bookingsFacade.findAll();
+        request.setAttribute("bookings", bookings);
+
+        // Chuyển hướng đến home.jsp
+        request.getRequestDispatcher("/admin/booking.jsp").forward(request, response);
     }
 
     /**
@@ -79,40 +84,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-
-        if("admin".equals(username) )
-        {
-            if("admin".equals(password)){
-             HttpSession session = request.getSession();
-            // session.setAttribute("adminId", "admin1");
-             response.sendRedirect("admin/booking");
-            }
-            else{
-                
-                HttpSession session = request.getSession();
-                session.setAttribute("errorMessage", "Sai tài khoản hoặc mật khẩu!");
-                response.sendRedirect("login.jsp");
-            }
-        }
-        else{
-            Users user = usersFacade.findByUsername(username); // Tìm user theo username
-
-            if (user != null && user.getPassword().equals(password)) {
-                // Đăng nhập thành công → Lưu user vào session & chuyển hướng
-                HttpSession session = request.getSession();
-                session.setAttribute("user", user);
-                response.sendRedirect("home");
-            } else {
-                // Đăng nhập thất bại → Trả về `index.jsp` với thông báo lỗi
-                HttpSession session = request.getSession();
-                session.setAttribute("errorMessage", "Sai tài khoản hoặc mật khẩu!");
-                response.sendRedirect("login.jsp");            
-            }
-        }
-        
-        
+        processRequest(request, response);
     }
 
     /**
