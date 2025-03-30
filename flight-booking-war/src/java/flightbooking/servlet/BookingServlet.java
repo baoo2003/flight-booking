@@ -138,8 +138,7 @@ public class BookingServlet extends HttpServlet {
             System.out.println("userId" + userId);
             System.out.println("numTickets" + numTickets);
             System.out.println("Lay chuyen bay");
-            Flights flight = new Flights();
-            flight.setFlightId(flightId);
+            Flights flight = flightsFacade.find(flightId);
             System.out.println("flight: " + flight);
             System.out.println("Lay user");
             Users user = new Users();
@@ -157,28 +156,19 @@ public class BookingServlet extends HttpServlet {
             
             bookingsFacade.create(booking);
             
-            System.out.println("Booking: "+ booking);
-            
             // Lưu thông tin hành khách
             for (int i = 1; i <= numTickets; i++) {
-                System.out.println("Tạo user "+ i);
                 Passengers passenger = new Passengers();
                 passenger.setBookingId(booking);
-                System.out.println("passenger booking id: " + passenger.getBookingId());
+                
                 String firstName = request.getParameter("passenger" + i + "_firstName");
                 String lastName = request.getParameter("passenger" + i + "_lastName");
                 String gender = request.getParameter("passenger" + i + "_gender");
                 String passport = request.getParameter("passenger" + i + "_passport");
                 Date date = java.sql.Date.valueOf(request.getParameter("passenger" + i + "_dob"));                
                 String idCardNumber = request.getParameter("passenger" + i + "_id_card_number");                
-                String type = request.getParameter("passenger" + i + "_type");                                  
-                System.out.println("first name: " + firstName);
-                System.out.println("last name: " + lastName);
-                System.out.println("gender: " + gender);
-                System.out.println("passport: " + passport);
-                System.out.println("date: " + date);
-                System.out.println("type: " + type);
-                System.out.println("idCardNumber: " + idCardNumber);                
+                String type = request.getParameter("passenger" + i + "_type");      
+                             
                 passenger.setFirstName(firstName);
                 passenger.setLastName(lastName);
                 passenger.setGender(gender);
@@ -187,8 +177,16 @@ public class BookingServlet extends HttpServlet {
                 passenger.setType(type);
                 passenger.setIdCardNumber(idCardNumber);
                 passenger.setType(type);
-                System.out.println("User "+ i + " : " + passenger);
+                
                 passengersFacade.create(passenger);
+                
+                if (flight.getAvailableSeats() >= numTickets) {
+                    flight.setAvailableSeats(flight.getAvailableSeats() - numTickets);
+                    flightsFacade.edit(flight);
+                } else {
+                    response.getWriter().println("Số lượng vé không đủ");
+                    transaction.rollback();
+                }
             }
             
             // Commit transaction nếu không có lỗi
