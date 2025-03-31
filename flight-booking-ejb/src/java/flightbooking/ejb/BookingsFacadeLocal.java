@@ -29,4 +29,5 @@ public interface BookingsFacadeLocal {
 
     int count();
     
+    List<Bookings> findByUserId(int userId);
 }
