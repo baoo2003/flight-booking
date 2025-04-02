@@ -62,6 +62,8 @@ public class Bookings implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "booking_reference")
     private String bookingReference;
+    @Column(name = "status")
+    private String status;    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "bookingId")
     private Collection<Passengers> passengersCollection;
     @JoinColumn(name = "flight_id", referencedColumnName = "flight_id")
@@ -78,10 +80,11 @@ public class Bookings implements Serializable {
         this.bookingId = bookingId;
     }
 
-    public Bookings(Integer bookingId, BigDecimal totalPrice, String bookingReference) {
+    public Bookings(Integer bookingId, BigDecimal totalPrice, String bookingReference, String status) {
         this.bookingId = bookingId;
         this.totalPrice = totalPrice;
         this.bookingReference = bookingReference;
+        this.status = status;
     }
 
     public Integer getBookingId() {
@@ -114,6 +117,14 @@ public class Bookings implements Serializable {
 
     public void setBookingReference(String bookingReference) {
         this.bookingReference = bookingReference;
+    }
+    
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @XmlTransient
