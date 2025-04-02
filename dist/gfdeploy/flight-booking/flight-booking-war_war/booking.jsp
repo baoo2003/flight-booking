@@ -7,153 +7,199 @@
 %>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Đặt vé</title>
-        <script>
-            function generatePassengerForms() {
-                var numTickets = document.getElementById("numTickets").value;
-                var container = document.getElementById("passengerForms");
-                container.innerHTML = ""; // Xóa nội dung cũ
+<head>
+    <meta charset="UTF-8">
+    <title>Đặt vé</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
 
-                for (let i = 1; i <= numTickets; i++) {
-                    let fieldset = document.createElement("fieldset");
+        h1, h2, h3 {
+            text-align: center;
+            color: #007ACC;
+        }
 
-                    let legend = document.createElement("legend");
-                    legend.textContent = "Hành khách " + i;
-                    fieldset.appendChild(legend);
+        form {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-                    // Họ
-                    let labelFirstName = document.createElement("label");
-                    labelFirstName.textContent = "Họ:";
-                    let inputFirstName = document.createElement("input");
-                    inputFirstName.setAttribute("type", "text");
-                    inputFirstName.setAttribute("name", "passenger" + i + "_firstName");
-                    inputFirstName.required = true;
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
 
-                    // Tên
-                    let labelLastName = document.createElement("label");
-                    labelLastName.textContent = "Tên:";
-                    let inputLastName = document.createElement("input");
-                    inputLastName.setAttribute("type", "text");
-                    inputLastName.setAttribute("name", "passenger" + i + "_lastName");
-                    inputLastName.required = true;
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
 
-                    // Ngày sinh
-                    let labelDob = document.createElement("label");
-                    labelDob.textContent = "Ngày sinh:";
-                    let inputDob = document.createElement("input");
-                    inputDob.setAttribute("type", "date");
-                    inputDob.setAttribute("name", "passenger" + i + "_dob");
-                    inputDob.required = true;
+        fieldset {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+        }
 
-                    // Giới tính
-                    let labelGender = document.createElement("label");
-                    labelGender.textContent = "Giới tính:";
-                    let selectGender = document.createElement("select");
-                    selectGender.setAttribute("name", "passenger" + i + "_gender");
-                    let optionMale = new Option("Nam", "Male");
-                    let optionFemale = new Option("Nữ", "Female");
-                    selectGender.appendChild(optionMale);
-                    selectGender.appendChild(optionFemale);
+        legend {
+            font-weight: bold;
+            color: #333;
+        }
 
-                    // Loại hành khách (Adult, Children, Infant)
-                    let labelType = document.createElement("label");
-                    labelType.textContent = "Loại hành khách:";
-                    let selectType = document.createElement("select");
-                    selectType.setAttribute("name", "passenger" + i + "_type");
-                    selectType.setAttribute("id", "passenger" + i + "_type");
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #007ACC;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            margin-top: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
 
-                    let optionAdult = new Option("Người lớn", "Adult");
-                    let optionChildren = new Option("Trẻ em", "Child");
-                    let optionInfant = new Option("Em bé", "Infant");
-                    selectType.appendChild(optionAdult);
-                    selectType.appendChild(optionChildren);
-                    selectType.appendChild(optionInfant);
+        input[type="submit"]:hover {
+            background-color: #005f99;
+        }
+    </style>
 
-                    // Container chứa CMND và Hộ chiếu
-                    let identityContainer = document.createElement("div");
-                    identityContainer.setAttribute("id", "identityContainer" + i);
+    <script>
+        function generatePassengerForms() {
+            var numTickets = document.getElementById("numTickets").value;
+            var container = document.getElementById("passengerForms");
+            container.innerHTML = "";
 
-                    // Hộ chiếu
-                    let labelPassport = document.createElement("label");
-                    labelPassport.textContent = "Hộ chiếu:";
-                    let inputPassport = document.createElement("input");
-                    inputPassport.setAttribute("type", "text");
-                    inputPassport.setAttribute("name", "passenger" + i + "_passport");                    
+            for (let i = 1; i <= numTickets; i++) {
+                let fieldset = document.createElement("fieldset");
 
-                    // CCCD/CMND
-                    let labelIdCardNumber = document.createElement("label");
-                    labelIdCardNumber.textContent = "CCCD/CMND:";
-                    let inputIdCardNumber = document.createElement("input");
-                    inputIdCardNumber.setAttribute("type", "text");
-                    inputIdCardNumber.setAttribute("name", "passenger" + i + "_id_card_number");
+                let legend = document.createElement("legend");
+                legend.textContent = "Hành khách " + i;
+                fieldset.appendChild(legend);
 
-                    // Thêm Hộ chiếu và CMND vào container
-                    identityContainer.appendChild(labelPassport);
-                    identityContainer.appendChild(inputPassport);
-                    identityContainer.appendChild(document.createElement("br"));
+                // Họ
+                let labelFirstName = document.createElement("label");
+                labelFirstName.textContent = "Họ:";
+                let inputFirstName = document.createElement("input");
+                inputFirstName.type = "text";
+                inputFirstName.name = "passenger" + i + "_firstName";
+                inputFirstName.required = true;
 
-                    identityContainer.appendChild(labelIdCardNumber);
-                    identityContainer.appendChild(inputIdCardNumber);
-                    identityContainer.appendChild(document.createElement("br"));
+                // Tên
+                let labelLastName = document.createElement("label");
+                labelLastName.textContent = "Tên:";
+                let inputLastName = document.createElement("input");
+                inputLastName.type = "text";
+                inputLastName.name = "passenger" + i + "_lastName";
+                inputLastName.required = true;
 
-                    // Mặc định ẩn container
-                    identityContainer.style.display = "block";
+                // Ngày sinh
+                let labelDob = document.createElement("label");
+                labelDob.textContent = "Ngày sinh:";
+                let inputDob = document.createElement("input");
+                inputDob.type = "date";
+                inputDob.name = "passenger" + i + "_dob";
+                inputDob.required = true;
 
-                    // Thêm sự kiện để xử lý thay đổi loại hành khách
-                    selectType.addEventListener("change", function () {
-                        if (this.value === "Adult") {
-                            identityContainer.style.display = "block"; // Hiện CMND + Hộ chiếu
-                        } else {
-                            identityContainer.style.display = "none"; // Ẩn CMND + Hộ chiếu
-                        }
-                    });
+                // Giới tính
+                let labelGender = document.createElement("label");
+                labelGender.textContent = "Giới tính:";
+                let selectGender = document.createElement("select");
+                selectGender.name = "passenger" + i + "_gender";
+                selectGender.innerHTML = `<option value="Male">Nam</option><option value="Female">Nữ</option>`;
 
-                    // Thêm tất cả vào fieldset
-                    fieldset.appendChild(labelFirstName);
-                    fieldset.appendChild(inputFirstName);
-                    fieldset.appendChild(document.createElement("br"));
+                // Loại hành khách
+                let labelType = document.createElement("label");
+                labelType.textContent = "Loại hành khách:";
+                let selectType = document.createElement("select");
+                selectType.name = "passenger" + i + "_type";
+                selectType.id = "passenger" + i + "_type";
+                selectType.innerHTML = `
+                    <option value="Adult">Người lớn</option>
+                    <option value="Child">Trẻ em</option>
+                    <option value="Infant">Em bé</option>`;
 
-                    fieldset.appendChild(labelLastName);
-                    fieldset.appendChild(inputLastName);
-                    fieldset.appendChild(document.createElement("br"));
+                // CMND và Hộ chiếu container
+                let identityContainer = document.createElement("div");
+                identityContainer.id = "identityContainer" + i;
 
-                    fieldset.appendChild(labelDob);
-                    fieldset.appendChild(inputDob);
-                    fieldset.appendChild(document.createElement("br"));
+                let labelPassport = document.createElement("label");
+                labelPassport.textContent = "Hộ chiếu:";
+                let inputPassport = document.createElement("input");
+                inputPassport.type = "text";
+                inputPassport.name = "passenger" + i + "_passport";
 
-                    fieldset.appendChild(labelGender);
-                    fieldset.appendChild(selectGender);
-                    fieldset.appendChild(document.createElement("br"));
+                let labelIdCard = document.createElement("label");
+                labelIdCard.textContent = "CCCD/CMND:";
+                let inputIdCard = document.createElement("input");
+                inputIdCard.type = "text";
+                inputIdCard.name = "passenger" + i + "_id_card_number";
 
-                    fieldset.appendChild(labelType);
-                    fieldset.appendChild(selectType);
-                    fieldset.appendChild(document.createElement("br"));
+                identityContainer.appendChild(labelPassport);
+                identityContainer.appendChild(inputPassport);
+                identityContainer.appendChild(labelIdCard);
+                identityContainer.appendChild(inputIdCard);
 
-                    // Thêm container chứa CMND và Hộ chiếu
-                    fieldset.appendChild(identityContainer);
+                identityContainer.style.display = "block";
 
-                    container.appendChild(fieldset);
-                }
+                selectType.addEventListener("change", function () {
+                    identityContainer.style.display = this.value === "Adult" ? "block" : "none";
+                });
+
+                // Add to fieldset
+                fieldset.appendChild(labelFirstName);
+                fieldset.appendChild(inputFirstName);
+
+                fieldset.appendChild(labelLastName);
+                fieldset.appendChild(inputLastName);
+
+                fieldset.appendChild(labelDob);
+                fieldset.appendChild(inputDob);
+
+                fieldset.appendChild(labelGender);
+                fieldset.appendChild(selectGender);
+
+                fieldset.appendChild(labelType);
+                fieldset.appendChild(selectType);
+
+                fieldset.appendChild(identityContainer);
+
+                container.appendChild(fieldset);
             }
-        </script>
-    </head>
-    <body>
-        <h1>Đặt vé cho chuyến bay</h1>
-        <h2>Mã chuyến bay: <%=flight.getFlightNumber()%></h2>
-        <h3>Tên người dùng: <%=user.getFirstName()%> <%=user.getLastName()%></h3>
+        }
+    </script>
+</head>
+<body>
 
-        <form action="./booking" method="post">
-            <input type="hidden" name="flightId" value="<%=flight.getFlightId()%>">
-            <input type="hidden" name="userId" value="<%=user.getUserId()%>">
+    <h1>Đặt vé cho chuyến bay</h1>
+    <h2>Mã chuyến bay: <%=flight.getFlightNumber()%></h2>
+    <h3>Tên người dùng: <%=user.getFirstName()%> <%=user.getLastName()%></h3>
 
-            <label>Số vé:</label>
-            <input type="number" id="numTickets" name="numTickets" min="1" max="10" required onchange="generatePassengerForms()"><br>
+    <form action="./booking" method="post">
+        <input type="hidden" name="flightId" value="<%=flight.getFlightId()%>">
+        <input type="hidden" name="userId" value="<%=user.getUserId()%>">
 
-            <div id="passengerForms"></div>
+        <label>Số vé:</label>
+        <input type="number" id="numTickets" name="numTickets" min="1" max="10" required onchange="generatePassengerForms()">
 
-            <input type="submit" value="Xác nhận đặt vé">
-        </form>
-    </body>
+        <div id="passengerForms"></div>
+
+        <input type="submit" value="Xác nhận đặt vé">
+    </form>
+
+</body>
 </html>
