@@ -40,7 +40,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Bookings.findByBookingId", query = "SELECT b FROM Bookings b WHERE b.bookingId = :bookingId"),
     @NamedQuery(name = "Bookings.findByBookingDate", query = "SELECT b FROM Bookings b WHERE b.bookingDate = :bookingDate"),
     @NamedQuery(name = "Bookings.findByTotalPrice", query = "SELECT b FROM Bookings b WHERE b.totalPrice = :totalPrice"),
-    @NamedQuery(name = "Bookings.findByBookingReference", query = "SELECT b FROM Bookings b WHERE b.bookingReference = :bookingReference")})
+    @NamedQuery(name = "Bookings.findByBookingReference", query = "SELECT b FROM Bookings b WHERE b.bookingReference = :bookingReference"),
+    @NamedQuery(name = "Bookings.findByStatus", query = "SELECT b FROM Bookings b WHERE b.status = :status")})
 public class Bookings implements Serializable {
 
     private static final long serialVersionUID = 1L;
