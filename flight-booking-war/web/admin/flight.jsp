@@ -42,14 +42,16 @@
     </head>
     <body>
         <h2>Danh sách chuyến bay</h2>
-        <a href="./create-flight" class="create-btn">Thêm chuyến bay mới</a>
+        <a href="createFlight" class="create-btn">Thêm chuyến bay mới</a>
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Số hiệu chuyến bay</th>
-                    <th>Khởi hành</th>
+                    <th>Giờ Khởi hành</th>
+                    <th>Sân bay khởi hành</th>
                     <th>Đến nơi</th>
+                    <th>Sân bay hạ cánh</th>
                     <th>Thời gian bay</th>
                     <th>Giá</th>
                     <th>Số ghế trống</th>
@@ -63,15 +65,16 @@
                         <td>${flight.flightId}</td>
                         <td>${flight.flightNumber}</td>
                         <td>${flight.departureTime}</td>
+                        <td>${flight.departureAirportId.name}</td>
                         <td>${flight.arrivalTime}</td>
+                        <td>${flight.arrivalAirportId.name}</td>
                         <td>${flight.duration}</td>
                         <td>${flight.price}</td>
                         <td>${flight.availableSeats}</td>
                         <td>${flight.maxSeats}</td>
                         <td>
                             <a href="editFlight?id=${flight.flightId}" class="action-btn edit-btn">Sửa</a>
-                            <a href="deleteFlight?id=${flight.flightId}" class="action-btn delete-btn" 
-                               onclick="return confirm('Bạn chắc chắn muốn xóa chuyến bay này?');">Xóa</a>
+                           
                         </td>
                     </tr>
                 </c:forEach>
