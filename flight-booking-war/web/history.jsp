@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <!DOCTYPE html>
 <html>
@@ -155,6 +156,7 @@
                             <th>Ngày Đặt Vé</th>
                             <th>Số lượng</th>
                             <th>Tổng Giá</th>
+                            <th>Trạng Thái</th>
                             <th>Hành Động</th>
                         </tr>
                     </thead>
@@ -169,9 +171,21 @@
                                 <td>${booking.bookingDate}</td>
                                 <td>${booking.passengersCollection.size()}</td>
                                 <td>${booking.totalPrice}</td>
+                                <td>${booking.status}</td>
                                 <td>
-                                    <a href="editBooking?id=${booking.bookingId}" class="action-btn edit-btn">Sửa</a>
-                                    <a href="deleteBooking?id=${booking.bookingId}" class="action-btn delete-btn" onclick="return confirm('Bạn có chắc chắn muốn xóa vé này không?');">Xóa</a>
+                                    <form action="cancel-booking" method="post">
+                                        <input type="hidden" name="id" value="${booking.bookingId}" />
+                                        <fmt:formatDate var="currentTime" value="<%= new java.util.Date() %>" pattern="yyyy-MM-dd HH:mm:ss" />
+                                        <fmt:formatDate var="departureTime" value="${booking.flightId.departureTime}" pattern="yyyy-MM-dd HH:mm:ss" />
+                                        <c:if test="${booking.status ne 'Đã hủy' && currentTime lt departureTime}">
+                                            <button
+                                                type="submit"
+                                                class="action-btn delete-btn" 
+                                                onclick="return confirm('Bạn có chắc chắn muốn hủy vé không?');">
+                                                Hủy vé
+                                            </button>
+                                        </c:if>
+                                    </form>
                                 </td>
                             </tr>
                             <!-- Passenger Details Row -->
