@@ -186,17 +186,7 @@
 
                 fieldset.appendChild(identityContainer);
 
-                container.appendChild(fieldset);
-                
-                inputDob.addEventListener("change", function () {
-                    const rawDate = this.value; // yyyy-mm-dd
-                    if (rawDate) {
-                        const parts = rawDate.split("-");
-                        const formatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
-                        console.log("Ngày chọn:", formatted); // hoặc lưu vào input hidden nếu cần
-                    }
-                });
-
+                container.appendChild(fieldset);                                
             }
         }
     </script>
