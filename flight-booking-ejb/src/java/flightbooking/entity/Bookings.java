@@ -75,6 +75,7 @@ public class Bookings implements Serializable {
     private Users userId;
 
     public Bookings() {
+        this.status = "Đã đặt";
     }
 
     public Bookings(Integer bookingId) {
