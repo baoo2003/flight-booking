@@ -83,6 +83,13 @@
             var numTickets = document.getElementById("numTickets").value;
             var container = document.getElementById("passengerForms");
             container.innerHTML = "";
+            
+            // Lấy ngày hiện tại để giới hạn max cho ngày sinh
+            let today = new Date();
+            let yyyy = today.getFullYear();
+            let mm = String(today.getMonth() + 1).padStart(2, '0');
+            let dd = String(today.getDate()).padStart(2, '0');
+            let maxDate = yyyy + '-' + mm + '-' + dd;
 
             for (let i = 1; i <= numTickets; i++) {
                 let fieldset = document.createElement("fieldset");
@@ -114,6 +121,7 @@
                 inputDob.type = "date";
                 inputDob.name = "passenger" + i + "_dob";
                 inputDob.required = true;
+                inputDob.max = maxDate; 
 
                 // Giới tính
                 let labelGender = document.createElement("label");
@@ -179,6 +187,16 @@
                 fieldset.appendChild(identityContainer);
 
                 container.appendChild(fieldset);
+                
+                inputDob.addEventListener("change", function () {
+                    const rawDate = this.value; // yyyy-mm-dd
+                    if (rawDate) {
+                        const parts = rawDate.split("-");
+                        const formatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                        console.log("Ngày chọn:", formatted); // hoặc lưu vào input hidden nếu cần
+                    }
+                });
+
             }
         }
     </script>

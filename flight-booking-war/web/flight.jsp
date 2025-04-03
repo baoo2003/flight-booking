@@ -1,9 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="flightbooking.entity.Flights" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.text.NumberFormat" %>
+<%@ page import="java.util.Locale" %>
 <%@ page import="java.util.List" %>
 
 <%
     List<Flights> flights = (List<Flights>) request.getAttribute("flights");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm - dd/MM/yyyy");
+    NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
 %>
 
 <!DOCTYPE html>
@@ -34,13 +39,24 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         th, td {
             border: 1px solid #ddd;
             padding: 12px;
-            text-align: center;
+            text-align: center;            
+        }
+                
+        th:nth-child(2), td:nth-child(2),  /* Sân bay khởi hành */
+        th:nth-child(3), td:nth-child(3) { /* Sân bay đến */
+            width: 12%;
+        }
+
+        th:nth-child(4), td:nth-child(4),  /* Thời gian khởi hành */
+        th:nth-child(5), td:nth-child(5) { /* Thời gian đến */
+            width: 12%;
         }
 
         th {
@@ -116,9 +132,9 @@
                 <td><%= flight.getFlightNumber() %></td>
                 <td><%= flight.getDepartureAirportId().getName() %></td>
                 <td><%= flight.getArrivalAirportId().getName() %></td>
-                <td><%= flight.getDepartureTime() %></td>
-                <td><%= flight.getArrivalTime() %></td>
-                <td><%= flight.getPrice() %> VNĐ</td>
+                <td><%= dateFormat.format(flight.getDepartureTime()) %></td>
+                <td><%= dateFormat.format(flight.getArrivalTime()) %></td>
+                <td><%= currencyFormat.format(flight.getPrice()) %> VNĐ</td>
                 <td><%= flight.getAvailableSeats() %></td>
                 <td><a class="booking-link" href="booking?flightId=<%= flight.getFlightId() %>">Đặt</a></td>
             </tr>
