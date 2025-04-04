@@ -52,8 +52,6 @@
                         <td>${booking.totalPrice}</td>
                         <td>
                             <a href="editBooking?id=${booking.bookingId}" class="action-btn edit-btn">Sửa</a>
-                            <a href="deleteBooking?id=${booking.bookingId}" class="action-btn delete-btn" onclick="return confirm('Bạn chắc chắn muốn xóa vé này?');">Xóa</a>
-                        </td>
                     </tr>
                 </c:forEach>
             </tbody>
