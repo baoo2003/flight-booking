@@ -72,7 +72,8 @@
     <form action="./login" method="POST">
         <input type="text" name="username" placeholder="Tên đăng nhập" required> <br>
         <input type="password" name="password" placeholder="Mật khẩu" required> <br>
-        <button type="submit">Đăng nhập</button>
+        <button type="submit">Đăng nhập</button>        
+        <p>Bạn chưa có tài khoản? <a href="register.jsp">Đăng ký</a></p>
     </form>
 
     <%-- Hiển thị thông báo lỗi nếu có --%>
