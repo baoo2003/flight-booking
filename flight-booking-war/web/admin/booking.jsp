@@ -52,6 +52,7 @@
                         <td>${booking.totalPrice}</td>
                         <td>
                             <a href="editBooking?id=${booking.bookingId}" class="action-btn edit-btn">Sửa</a>
+                        </td>
                     </tr>
                 </c:forEach>
             </tbody>
